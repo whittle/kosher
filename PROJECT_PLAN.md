@@ -226,29 +226,6 @@ ai-bdd/
 | Playwright MCP connection issues | Implement reconnection logic; clear error messages |
 | Ambiguous Gherkin steps | LLM asks for clarification or makes best guess with confidence score |
 
-## Getting Started
-
-```bash
-# 1. Install Ollama
-curl -fsSL https://ollama.com/install.sh | sh
-
-# 2. Pull the model
-ollama pull qwen2.5-coder:14b-instruct-q4_K_M
-
-# 3. Clone and set up project
-git clone <repo>
-cd ai-bdd
-python -m venv venv
-source venv/bin/activate
-pip install -e .
-
-# 4. Start Playwright MCP server (separate terminal)
-npx @anthropic/playwright-mcp
-
-# 5. Run proof of concept
-python poc/main.py
-```
-
 ## Next Steps
 
 1. **Immediate:** Set up Ollama with Qwen 2.5 Coder 14B
