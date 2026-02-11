@@ -6,7 +6,7 @@ engine and Playwright browser automation.
 
 ## Requirements
 
-Requires ollama and playwright-mcp running locally. Developed using `uv`. Tested using Python v3.14.
+Requires ollama and playwright-mcp running locally. Tested using Python v3.14.
 
 ## Getting Started
 
