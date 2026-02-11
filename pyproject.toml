@@ -10,4 +10,5 @@ dependencies = []
 dev = [
     "pre-commit>=4.5.1",
     "ruff>=0.15.0",
+    "ty>=0.0.16",
 ]
