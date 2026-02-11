@@ -48,15 +48,15 @@ engine and Playwright browser automation.
 **Goal:** Confirm that a local LLM can reliably translate Gherkin steps into Playwright actions.
 
 **Tasks:**
-1. Install Ollama and pull `qwen2.5-coder:14b-instruct-q4_K_M`
-2. Set up Playwright MCP server
-3. Create a minimal Python script that:
+- [x] Install Ollama and pull `qwen2.5-coder:14b-instruct-q4_K_M`
+- [x] Set up Playwright MCP server
+- [ ] Create a minimal Python script that:
    - Hardcodes 3-5 simple Gherkin steps
    - Sends each step to the LLM with available Playwright tools as context
    - Receives structured JSON output specifying the Playwright action
    - Executes the action via Playwright MCP
-4. Test against a simple static HTML page
-5. Evaluate: Does the LLM reliably produce correct actions?
+- [ ] Test against a simple static HTML page
+- [ ] Evaluate: Does the LLM reliably produce correct actions?
 
 **Success Criteria:**
 - LLM correctly interprets 80%+ of simple steps on first attempt
@@ -169,8 +169,8 @@ engine and Playwright browser automation.
 **Tasks:**
 1. Create CLI with argparse or click:
    ```bash
-   ai-bdd run features/login.feature --base-url http://localhost:3000
-   ai-bdd run features/ --headless --report json
+   kosher run features/login.feature --base-url http://localhost:3000
+   kosher run features/ --headless --report json
    ```
 2. Add `--dry-run` mode (show planned actions without executing)
 3. Add `--verbose` mode for debugging LLM reasoning
@@ -187,8 +187,8 @@ engine and Playwright browser automation.
 ## Project Structure
 
 ```
-ai-bdd/
-├── ai_bdd/
+kosher/
+├── kosher/
 │   ├── __init__.py
 │   ├── cli.py              # Command-line interface
 │   ├── config.py           # Configuration management
@@ -228,7 +228,7 @@ ai-bdd/
 
 ## Next Steps
 
-1. **Immediate:** Set up Ollama with Qwen 2.5 Coder 14B
-2. **Immediate:** Verify Playwright MCP is available and working
-3. **This week:** Complete Phase 1 proof of concept
-4. **Decision point:** After Phase 1, evaluate if local LLM is sufficient or if adjustments needed
+- [x] **Immediate:** Set up Ollama with Qwen 2.5 Coder 14B
+- [x] **Immediate:** Verify Playwright MCP is available and working
+- [ ] **This week:** Complete Phase 1 proof of concept
+- [ ] **Decision point:** After Phase 1, evaluate if local LLM is sufficient or if adjustments needed
