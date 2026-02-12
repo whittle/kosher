@@ -18,7 +18,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 ollama pull qwen2.5-coder:14b-instruct-q4_K_M
 
 # 3. Start Playwright MCP server (separate terminal)
-npx @anthropic/playwright-mcp@latest
+npx @playwright/mcp@latest
 
 # 4. Clone and set up project
 git clone <repo>
