@@ -76,8 +76,8 @@ reports failure.
 **Goal:** Prove that error reporting works (at all).
 
 **Tasks:**
-- [ ] Create an alternative Gherkin script that is intended to fail.
-- [ ] Validate that the output correctly indicates the failing step.
+- [x] Create an alternative Gherkin script that is intended to fail.
+- [x] Validate that the output correctly indicates the failing step.
 
 ---
 

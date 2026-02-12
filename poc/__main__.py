@@ -6,7 +6,7 @@ import sys
 from poc.llm import SYSTEM_PROMPT, execute_step
 from poc.mcp_client import McpClient
 from poc.server import start_server
-from poc.steps import STEPS
+from poc.steps import FAILING_STEPS
 
 GREEN = "\033[92m"
 RED = "\033[91m"
@@ -30,7 +30,7 @@ async def run() -> bool:
     failed = 0
 
     try:
-        for step in STEPS:
+        for step in FAILING_STEPS:
             print(f"  Step: {step}")
             text, success = await execute_step(step, mcp, history)
             if success:
