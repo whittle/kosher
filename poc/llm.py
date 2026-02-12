@@ -1,5 +1,7 @@
 """Ollama agentic loop for interpreting Gherkin steps via tool calling."""
 
+import json
+import re
 from typing import Any
 
 from ollama import AsyncClient
@@ -15,9 +17,9 @@ Rules:
 1. Before interacting with any element, call browser_snapshot to see the current \
 page and discover element refs.
 2. Use the exact "ref" value from the snapshot when calling browser_click or \
-browser_type. Pass the ref as the "element" parameter.
+browser_type. Pass the ref as the "ref" parameter.
 3. For browser_type, set the "text" parameter to the value to type and \
-"element" to the ref of the target field. Do NOT press Enter unless the step \
+"ref" to the ref of the target field. Do NOT press Enter unless the step \
 says to.
 4. For "Given" steps that mention a URL, call browser_navigate with that URL, \
 then call browser_snapshot to confirm.
@@ -29,6 +31,36 @@ or "FAIL: <reason>" if it does not.
 action.
 8. Stop calling tools once the step is complete and reply with your text verdict.
 """
+
+
+def parse_tool_call_from_text(text: str | None) -> tuple[str, dict[str, Any]] | None:
+    """Try to parse a tool call from JSON text content.
+
+    Returns (name, arguments) tuple if found, None otherwise.
+    """
+    if not text:
+        return None
+
+    # Strip markdown code blocks if present
+    text = text.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```\w*\n?", "", text)
+        text = re.sub(r"\n?```$", "", text)
+        text = text.strip()
+
+    try:
+        data = json.loads(text)
+    except json.JSONDecodeError:
+        return None
+
+    # Handle {"name": "...", "arguments": {...}} format
+    if isinstance(data, dict) and "name" in data:
+        name = data.get("name")
+        args = data.get("arguments", data.get("parameters", {}))
+        if isinstance(name, str) and isinstance(args, dict):
+            return name, args
+
+    return None
 
 
 async def execute_step(
@@ -85,7 +117,26 @@ async def execute_step(
                     {"role": "tool", "content": result_text, "tool_name": name}
                 )
         else:
-            # LLM responded with text — step is done
+            # Try to parse tool call from text content
+            parsed = parse_tool_call_from_text(msg.content)
+            if parsed:
+                name, args = parsed
+                print(f"    -> {name}({args}) [parsed from text]", flush=True)
+
+                result_text = await mcp.call_tool(name, args)
+                preview = (
+                    result_text[:200] + "..." if len(result_text) > 200 else result_text
+                )
+                print(f"    <- {preview}", flush=True)
+
+                # Add to history as if it were a tool call
+                history.append({"role": "assistant", "content": msg.content})
+                history.append(
+                    {"role": "tool", "content": result_text, "tool_name": name}
+                )
+                continue  # Next round
+
+            # LLM responded with non-tool text — step is done
             text = msg.content or ""
             history.append({"role": "assistant", "content": text})
             success = not text.upper().startswith("FAIL")
