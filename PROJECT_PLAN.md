@@ -50,12 +50,12 @@ engine and Playwright browser automation.
 **Tasks:**
 - [x] Install Ollama and pull `qwen2.5-coder:14b-instruct-q4_K_M`
 - [x] Set up Playwright MCP server
-- [ ] Create a minimal Python script that:
+- [x] Create a minimal Python script that:
    - Hardcodes 3-5 simple Gherkin steps
    - Sends each step to the LLM with available Playwright tools as context
    - Receives structured JSON output specifying the Playwright action
    - Executes the action via Playwright MCP
-- [ ] Test against a simple static HTML page
+- [x] Test against a simple static HTML page
 - [ ] Evaluate: Does the LLM reliably produce correct actions?
 
 **Success Criteria:**
@@ -65,6 +65,19 @@ engine and Playwright browser automation.
 **Deliverables:**
 - `poc/` directory with minimal working prototype
 - Findings document on LLM reliability
+
+---
+
+### Phase 1a: Rudimentary Error Handling
+
+For red-green-refactor to work, We need to be sure that the engine correctly
+reports failure.
+
+**Goal:** Prove that error reporting works (at all).
+
+**Tasks:**
+- [ ] Create an alternative Gherkin script that is intended to fail.
+- [ ] Validate that the output correctly indicates the failing step.
 
 ---
 
