@@ -58,6 +58,13 @@ async def execute_step(
         )
         msg = response.message
 
+        # Debug: show what the LLM returned
+        content_preview = repr(msg.content[:100]) if msg.content else None
+        print(
+            f"    [round {_round + 1}] tool_calls={bool(msg.tool_calls)}, content={content_preview}",
+            flush=True,
+        )
+
         if msg.tool_calls:
             # Add the assistant's tool-call message to history
             history.append(msg.model_dump())
@@ -65,14 +72,14 @@ async def execute_step(
             for tool_call in msg.tool_calls:
                 name = tool_call.function.name
                 args = tool_call.function.arguments
-                print(f"    -> {name}({args})")
+                print(f"    -> {name}({args})", flush=True)
 
                 result_text = await mcp.call_tool(name, args)
                 # Truncate long snapshots for display
                 preview = (
                     result_text[:200] + "..." if len(result_text) > 200 else result_text
                 )
-                print(f"    <- {preview}")
+                print(f"    <- {preview}", flush=True)
 
                 history.append(
                     {"role": "tool", "content": result_text, "tool_name": name}
