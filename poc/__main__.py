@@ -6,7 +6,7 @@ import sys
 from poc.llm import SYSTEM_PROMPT, execute_step
 from poc.mcp_client import McpClient
 from poc.server import start_server
-from poc.steps import FAILING_STEPS
+from poc.steps import STEPS
 
 GREEN = "\033[92m"
 RED = "\033[91m"
@@ -29,26 +29,34 @@ async def run() -> bool:
     passed = 0
     failed = 0
 
-    try:
-        for step in FAILING_STEPS:
-            print(f"  Step: {step}")
-            text, success = await execute_step(step, mcp, history)
-            if success:
-                print(f"  {GREEN}PASS{RESET}: {text}\n")
-                passed += 1
-            else:
-                print(f"  {RED}FAIL{RESET}: {text}\n")
-                failed += 1
-    finally:
-        await mcp.close()
+    for step in STEPS:
+        print(f"  Step: {step}")
+        text, success = await execute_step(step, mcp, history)
+        if success:
+            print(f"  {GREEN}PASS{RESET}: {text}\n")
+            passed += 1
+        else:
+            print(f"  {RED}FAIL{RESET}: {text}\n")
+            failed += 1
+            break
 
     print("=" * 50)
     print(f"Results: {GREEN}{passed} passed{RESET}, {RED}{failed} failed{RESET}")
+
+    if failed == 0:
+        await mcp.close()
+    else:
+        print("Browser left open for review. Press Ctrl+C to exit.")
+        await asyncio.Event().wait()  # Wait indefinitely
+
     return failed == 0
 
 
 def main() -> None:
-    success = asyncio.run(run())
+    try:
+        success = asyncio.run(run())
+    except KeyboardInterrupt:
+        sys.exit(1)
     sys.exit(0 if success else 1)
 
 
