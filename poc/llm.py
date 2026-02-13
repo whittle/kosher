@@ -23,13 +23,17 @@ browser_type. Pass the ref as the "ref" parameter.
 says to.
 4. For "Given" steps that mention a URL, call browser_navigate with that URL, \
 then call browser_snapshot to confirm.
-5. For "Then" assertion steps, call browser_snapshot and check whether the \
-expected text is visible. Respond with exactly "PASS" if the assertion holds \
-or "FAIL: <reason>" if it does not.
+5. For "Then" assertion steps that check for text:
+   - First call browser_wait_for with "text" set to the expected content
+   - Then call browser_snapshot to verify
+   - Respond with "PASS" if visible, "FAIL: <reason>" if not
 6. For "When" action steps, after performing the action respond with "DONE".
 7. Only call one tool at a time. Wait for the result before deciding the next \
 action.
 8. Stop calling tools once the step is complete and reply with your text verdict.
+9. browser_wait_for waits for content to appear. Use parameters:
+   - "text": wait for this text to be visible (preferred for assertions)
+   - "timeout": milliseconds to wait (optional, default is reasonable)
 """
 
 
