@@ -56,7 +56,7 @@ engine and Playwright browser automation.
    - Receives structured JSON output specifying the Playwright action
    - Executes the action via Playwright MCP
 - [x] Test against a simple static HTML page
-- [ ] Evaluate: Does the LLM reliably produce correct actions?
+- [x] Evaluate: Does the LLM reliably produce correct actions?
 
 **Success Criteria:**
 - LLM correctly interprets 80%+ of simple steps on first attempt
@@ -86,15 +86,15 @@ reports failure.
 **Goal:** Replace hardcoded steps with proper Gherkin file parsing.
 
 **Tasks:**
-1. Integrate `gherkin-official` library
-2. Parse `.feature` files into structured step data
-3. Handle:
-   - Feature descriptions
-   - Scenario names
-   - Given/When/Then steps
-   - Scenario Outlines with examples
-   - Data tables
-4. Create step iterator that feeds parsed steps to the LLM
+[x] Integrate `gherkin-official` library
+[x] Parse `.feature` files into structured step data
+[x] Handle:
+   [x] Feature descriptions
+   [x] Scenario names
+   [x] Given/When/Then steps
+   [x] Scenario Outlines with examples
+   [x] Data tables
+[ ] Create step iterator that feeds parsed steps to the LLM
 
 **Deliverables:**
 - `parser/` module for Gherkin parsing
