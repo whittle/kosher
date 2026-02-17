@@ -94,7 +94,7 @@ reports failure.
    [x] Given/When/Then steps
    [x] Scenario Outlines with examples
    [x] Data tables
-[ ] Create step iterator that feeds parsed steps to the LLM
+[x] Create step iterator that feeds parsed steps to the LLM
 
 **Deliverables:**
 - `parser/` module for Gherkin parsing
@@ -107,15 +107,15 @@ reports failure.
 **Goal:** Build reliable, production-quality LLM communication.
 
 **Tasks:**
-1. Design prompt template that includes:
-   - Current page context (URL, visible elements)
-   - Available Playwright MCP tools with schemas
-   - The Gherkin step to execute
-   - Output format specification (JSON)
-2. Implement retry logic for malformed LLM responses
-3. Add response validation (is the JSON valid? does the tool exist?)
-4. Implement conversation context (LLM remembers previous steps in scenario)
-5. Handle LLM uncertainty (ask for clarification vs. best guess)
+[ ] Design prompt template that includes:
+   [ ] Current page context (URL, visible elements)
+   [ ] Available Playwright MCP tools with schemas
+   [ ] The Gherkin step to execute
+   [ ] Output format specification (JSON)
+[ ] Implement retry logic for malformed LLM responses
+[ ] Add response validation (is the JSON valid? does the tool exist?)
+[ ] Implement conversation context (LLM remembers previous steps in scenario)
+[ ] Handle LLM uncertainty (ask for clarification vs. best guess)
 
 **Deliverables:**
 - `llm/` module for Ollama communication
