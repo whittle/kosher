@@ -6,6 +6,8 @@ from typing import Any
 
 from ollama import AsyncClient
 
+from kosher.parser.models import Step
+
 MODEL = "qwen2.5-coder:14b-instruct-q4_K_M"
 MAX_ROUNDS = 10
 
@@ -68,14 +70,14 @@ def parse_tool_call_from_text(text: str | None) -> tuple[str, dict[str, Any]] | 
 
 
 async def execute_step(
-    step: str,
+    step: Step,
     mcp: Any,
     history: list[dict[str, Any]],
 ) -> tuple[str, bool]:
     """Execute a single Gherkin step through the LLM agentic loop.
 
     Args:
-        step: The Gherkin step text.
+        step: The Gherkin step.
         mcp: An McpClient instance with ollama_tools and call_tool().
         history: Conversation history (mutated in place across steps).
 
@@ -84,7 +86,7 @@ async def execute_step(
         responded with FAIL or we hit the round limit.
     """
     client = AsyncClient()
-    history.append({"role": "user", "content": step})
+    history.append({"role": "user", "content": step.full_text})
 
     for _round in range(MAX_ROUNDS):
         response = await client.chat(

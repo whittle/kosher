@@ -4,34 +4,41 @@ import argparse
 import asyncio
 import sys
 from collections import Counter
+from typing import Optional
 
-from poc.llm import SYSTEM_PROMPT, execute_step
-from poc.mcp_client import McpClient
-from poc.server import start_server
-from poc.steps import STEPS
+from kosher.parser import parse_feature
+from kosher.parser.models import Step
+
+from .llm import SYSTEM_PROMPT, execute_step
+from .mcp_client import McpClient
+from .server import start_server
 
 GREEN = "\033[92m"
 RED = "\033[91m"
 RESET = "\033[0m"
 
+FEATURE_FILE = "features/examples/login.feature"
 
-async def run_once(mcp: McpClient, base_url: str) -> tuple[int, int, str | None]:
+
+async def run_once(mcp: McpClient, base_url: str) -> tuple[int, int, Optional[Step]]:
     """Run the scenario once.
 
     Returns:
         (passed, failed, failed_step) where failed_step is the step text that failed,
         or None if all steps passed.
     """
+    feature = parse_feature(FEATURE_FILE)
+
     history: list[dict[str, object]] = [
         {"role": "system", "content": SYSTEM_PROMPT},
     ]
 
     passed = 0
     failed = 0
-    failed_step: str | None = None
+    failed_step: Optional[Step] = None
 
-    for step in STEPS:
-        print(f"  Step: {step}")
+    for step in feature.scenarios[0].steps:
+        print(f"  Step: {step.full_text}")
         text, success = await execute_step(step, mcp, history)
         if success:
             print(f"  {GREEN}PASS{RESET}: {text}\n")
@@ -77,7 +84,7 @@ async def run_benchmark(n: int) -> bool:
 
     successes = 0
     failures = 0
-    step_failures: Counter[str] = Counter()
+    step_failures: Counter[Step] = Counter()
 
     for i in range(n):
         print(f"{'=' * 50}")
